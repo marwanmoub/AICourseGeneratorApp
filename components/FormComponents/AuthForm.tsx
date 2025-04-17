@@ -1,11 +1,39 @@
-import { View, Text, Image, TouchableOpacity, Pressable } from "react-native";
-import React from "react";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  Pressable,
+  NativeSyntheticEvent,
+  TextInputChangeEventData,
+} from "react-native";
+import React, { useState } from "react";
 import CustomTextInput from "./CustomTextInput";
 import Colors from "@/constants/Colors";
 import { useRouter } from "expo-router";
+import { SignUpSchema } from "@/lib/validation/auth.validation";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/config/firebaseConfig";
+import { CreateNewUser } from "@/lib/actions/user.actions";
 
 const AuthForm = ({ type = "sign-up" }) => {
   const router = useRouter();
+  const [fullName, setFullName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const createAccount = async () => {
+    const data = {
+      fullName,
+      email,
+      password,
+    };
+    const result = await CreateNewUser(data);
+    if (result?.success) router.push("/auth/signIn");
+  };
+
+  const SaveUser = () => {};
+
   return (
     <View
       style={{
@@ -34,11 +62,34 @@ const AuthForm = ({ type = "sign-up" }) => {
         {type === "sign-up" ? "Create New Account" : "Welcome Back"}
       </Text>
 
-      {type === "sign-up" && <CustomTextInput placeholder="Full Name" />}
-      <CustomTextInput placeholder="Email" />
-      <CustomTextInput placeholder="Password" isPassword />
+      {type === "sign-up" && (
+        <CustomTextInput
+          placeholder="Full Name"
+          onChange={(value) => {
+            setFullName(value);
+          }}
+        />
+      )}
+      <CustomTextInput
+        placeholder="Email"
+        onChange={(value) => {
+          setEmail(value);
+        }}
+      />
+      <CustomTextInput
+        placeholder="Password"
+        isPassword
+        onChange={(value) => {
+          setPassword(value);
+        }}
+      />
 
       <TouchableOpacity
+        onPress={() => {
+          if (type === "sign-up") {
+            createAccount();
+          }
+        }}
         style={{
           padding: 15,
           backgroundColor: Colors.PRIMARY,
@@ -55,7 +106,7 @@ const AuthForm = ({ type = "sign-up" }) => {
             textAlign: "center",
           }}
         >
-          Create Account
+          {type === "sign-up" ? "Create Account" : "Sign In"}
         </Text>
       </TouchableOpacity>
 
