@@ -1,17 +1,32 @@
-import { View, Text, TextInput, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  TextInputChangeEventData,
+  NativeSyntheticEvent,
+} from "react-native";
 import React from "react";
 
 interface TextInputParams {
   placeholder: string;
   isPassword?: boolean;
+  onChange: (value: string) => void;
 }
 
-const CustomTextInput = ({ placeholder, isPassword }: TextInputParams) => {
+const CustomTextInput = ({
+  placeholder,
+  isPassword,
+  onChange,
+}: TextInputParams) => {
   return (
     <TextInput
       placeholder={placeholder}
       style={styles.textInput}
       secureTextEntry={isPassword ? true : false}
+      onChangeText={(value) => {
+        onChange(value);
+      }}
     />
   );
 };
