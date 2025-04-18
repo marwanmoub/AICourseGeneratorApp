@@ -5,28 +5,33 @@ import {
   StyleSheet,
   TextInputChangeEventData,
   NativeSyntheticEvent,
+  TextInputProps,
 } from "react-native";
 import React from "react";
 
-interface TextInputParams {
+interface TextInputParams extends TextInputProps {
   placeholder: string;
   isPassword?: boolean;
-  onChange: (value: string) => void;
+  customStyles?: any;
+  onChangeValue: (value: string) => void;
 }
 
 const CustomTextInput = ({
   placeholder,
-  isPassword,
-  onChange,
+  isPassword = false,
+  onChangeValue,
+  customStyles,
+  ...props
 }: TextInputParams) => {
   return (
     <TextInput
       placeholder={placeholder}
-      style={styles.textInput}
+      style={customStyles || styles.textInput}
       secureTextEntry={isPassword ? true : false}
       onChangeText={(value) => {
-        onChange(value);
+        onChangeValue(value);
       }}
+      {...props}
     />
   );
 };

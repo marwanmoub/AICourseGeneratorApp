@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
 import React from "react";
 import Colors from "@/constants/Colors";
 
@@ -6,9 +6,10 @@ interface ButtonProps {
   text: string;
   type?: "fill" | "outline";
   onPress?: () => void;
+  loading?: boolean;
 }
 
-const Button = ({ text, type = "fill", onPress }: ButtonProps) => {
+const Button = ({ text, type = "fill", onPress, loading }: ButtonProps) => {
   return (
     <TouchableOpacity
       style={{
@@ -20,17 +21,25 @@ const Button = ({ text, type = "fill", onPress }: ButtonProps) => {
         borderColor: Colors.PRIMARY,
         backgroundColor: type === "fill" ? Colors.PRIMARY : Colors.WHITE,
       }}
+      disabled={loading}
       onPress={onPress}
     >
-      <Text
-        style={{
-          textAlign: "center",
-          fontSize: 18,
-          color: type === "fill" ? Colors.WHITE : Colors.PRIMARY,
-        }}
-      >
-        {text}
-      </Text>
+      {!loading ? (
+        <Text
+          style={{
+            textAlign: "center",
+            fontSize: 18,
+            color: type === "fill" ? Colors.WHITE : Colors.PRIMARY,
+          }}
+        >
+          {text}
+        </Text>
+      ) : (
+        <ActivityIndicator
+          size="small"
+          color={type === "fill" ? Colors.WHITE : Colors.PRIMARY}
+        />
+      )}
     </TouchableOpacity>
   );
 };

@@ -97,21 +97,21 @@ const AuthForm = ({ type = "sign-up" }) => {
       {type === "sign-up" && (
         <CustomTextInput
           placeholder="Full Name"
-          onChange={(value) => {
+          onChangeValue={(value) => {
             setFullName(value);
           }}
         />
       )}
       <CustomTextInput
         placeholder="Email"
-        onChange={(value) => {
+        onChangeValue={(value) => {
           setEmail(value);
         }}
       />
       <CustomTextInput
         placeholder="Password"
         isPassword
-        onChange={(value) => {
+        onChangeValue={(value) => {
           setPassword(value);
         }}
       />
