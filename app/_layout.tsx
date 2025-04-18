@@ -1,6 +1,8 @@
 import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import { Text } from "react-native";
+import UserDetailContext from "@/context/UserDetailContext";
+import Toast from "react-native-toast-message";
 
 export default function RootLayout() {
   useFonts({
@@ -10,10 +12,13 @@ export default function RootLayout() {
     "outfit-bold": require("./../assets/fonts/Outfit-Bold.ttf"),
   });
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-      }}
-    ></Stack>
+    <UserDetailContext>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+        }}
+      />
+      <Toast />
+    </UserDetailContext>
   );
 }
