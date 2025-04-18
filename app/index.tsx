@@ -1,9 +1,43 @@
+import { auth, db } from "@/config/firebaseConfig";
 import Colors from "@/constants/Colors";
+import { UserDetailedContext } from "@/context/UserDetailContext";
 import { useRouter } from "expo-router";
+import { onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { useContext, useEffect } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function Index() {
   const router = useRouter();
+
+  const { setUserDetail } = useContext(UserDetailedContext);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      console.log("Hello I ran");
+      console.log(user);
+      if (user) {
+        console.log("DO I HAVE A USER");
+        if (user.email) {
+          const userDocRef = doc(db, "users", user.email);
+          try {
+            const result = await getDoc(userDocRef);
+            if (result.exists()) {
+              setUserDetail(result.data());
+              router.replace("/(tabs)/home");
+            }
+          } catch (error) {
+            console.error("Error fetching user document:", error);
+          }
+        }
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
   return (
     <View style={{ flex: 1, backgroundColor: Colors.WHITE }}>
       <Image
@@ -34,7 +68,7 @@ export default function Index() {
               fontFamily: "outfit-bold",
             }}
           >
-            Welcome to Coacing Guru
+            Welcome to Coaching Guru
           </Text>
 
           <Text
@@ -47,7 +81,7 @@ export default function Index() {
             }}
           >
             Transform your ideas into engaging educational content using this AI
-            generating course app for your interviews and study!
+            generating course app!
           </Text>
         </View>
 

@@ -6,15 +6,21 @@ import {
   Pressable,
   NativeSyntheticEvent,
   TextInputChangeEventData,
+  ActivityIndicator,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import CustomTextInput from "./CustomTextInput";
 import Colors from "@/constants/Colors";
 import { useRouter } from "expo-router";
 import { SignUpSchema } from "@/lib/validation/auth.validation";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/config/firebaseConfig";
-import { CreateNewUser } from "@/lib/actions/user.actions";
+import {
+  CreateNewUser,
+  getUserDetails,
+  userSignIn,
+} from "@/lib/actions/user.actions";
+import { UserDetailedContext } from "@/context/UserDetailContext";
 
 const AuthForm = ({ type = "sign-up" }) => {
   const router = useRouter();
@@ -22,17 +28,43 @@ const AuthForm = ({ type = "sign-up" }) => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const { setUserDetail } = useContext(UserDetailedContext);
+
   const createAccount = async () => {
+    setLoading(true);
     const data = {
       fullName,
       email,
       password,
     };
-    const result = await CreateNewUser(data);
-    if (result?.success) router.push("/auth/signIn");
+
+    await CreateNewUser(data)
+      .then((result) => {
+        setUserDetail(result?.data);
+        router.push("/auth/signIn");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
-  const SaveUser = () => {};
+  const onSignInClick = async () => {
+    setLoading(true);
+    const signInData = {
+      email,
+      password,
+    };
+    const result = await userSignIn(signInData);
+    setLoading(false);
+    if (result?.success) {
+      const userDetailsResponse = await getUserDetails(signInData?.email);
+      if (userDetailsResponse?.success) {
+        setUserDetail(userDetailsResponse?.data);
+      }
+    }
+  };
 
   return (
     <View
@@ -88,8 +120,11 @@ const AuthForm = ({ type = "sign-up" }) => {
         onPress={() => {
           if (type === "sign-up") {
             createAccount();
+          } else {
+            onSignInClick();
           }
         }}
+        disabled={loading}
         style={{
           padding: 15,
           backgroundColor: Colors.PRIMARY,
@@ -98,16 +133,20 @@ const AuthForm = ({ type = "sign-up" }) => {
           borderRadius: 10,
         }}
       >
-        <Text
-          style={{
-            fontFamily: "outfit",
-            fontSize: 20,
-            color: Colors.WHITE,
-            textAlign: "center",
-          }}
-        >
-          {type === "sign-up" ? "Create Account" : "Sign In"}
-        </Text>
+        {!loading ? (
+          <Text
+            style={{
+              fontFamily: "outfit",
+              fontSize: 20,
+              color: Colors.WHITE,
+              textAlign: "center",
+            }}
+          >
+            {type === "sign-up" ? "Create Account" : "Sign In"}
+          </Text>
+        ) : (
+          <ActivityIndicator size={"large"} color={"white"} />
+        )}
       </TouchableOpacity>
 
       <View
