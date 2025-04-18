@@ -4,29 +4,37 @@ import { UserDetailedContext } from "@/context/UserDetailContext";
 import { useRouter } from "expo-router";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
-import { useContext, useEffect } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useContext, useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function Index() {
   const router = useRouter();
 
   const { setUserDetail } = useContext(UserDetailedContext);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      console.log("Hello I ran");
-      console.log(user);
       if (user) {
-        console.log("DO I HAVE A USER");
         if (user.email) {
           const userDocRef = doc(db, "users", user.email);
           try {
+            setLoading(true);
             const result = await getDoc(userDocRef);
             if (result.exists()) {
               setUserDetail(result.data());
+              setLoading(false);
               router.replace("/(tabs)/home");
             }
           } catch (error) {
+            setLoading(false);
             console.error("Error fetching user document:", error);
           }
         }
@@ -37,6 +45,22 @@ export default function Index() {
       unsubscribe();
     };
   }, []);
+
+  if (loading) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: Colors.WHITE,
+        }}
+      >
+        <ActivityIndicator size={30} color={Colors.PRIMARY} />
+      </View>
+    );
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: Colors.WHITE }}>

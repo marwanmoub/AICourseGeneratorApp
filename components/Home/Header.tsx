@@ -4,7 +4,7 @@ import { UserDetailedContext } from "@/context/UserDetailContext";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 const Header = () => {
-  const { userDetail, setUserDetail } = useContext(UserDetailedContext);
+  const { userDetail } = useContext(UserDetailedContext);
   return (
     <View
       style={{

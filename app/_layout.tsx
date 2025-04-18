@@ -1,6 +1,5 @@
 import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
-import { Text } from "react-native";
 import UserDetailContext from "@/context/UserDetailContext";
 import Toast from "react-native-toast-message";
 
