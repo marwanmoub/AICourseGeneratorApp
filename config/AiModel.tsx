@@ -239,7 +239,6 @@ export async function GenerateTopics(courseTitleIdea: string) {
   ];
 
   try {
-    console.log("Im here");
     const response = await ai.models.generateContent({
       model,
       config,

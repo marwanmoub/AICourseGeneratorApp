@@ -6,32 +6,40 @@ import {
   FlatList,
   ScrollView,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Colors from "@/constants/Colors";
 import CustomTextInput from "@/components/FormComponents/CustomTextInput";
 import Button from "@/components/Shared/Button";
 import Prompt from "@/constants/Prompt";
 import { GenerateTopics } from "@/config/AiModel";
+import { UserDetailedContext } from "@/context/UserDetailContext";
+import { createCourse } from "@/lib/actions/course.actions";
+import { useRouter } from "expo-router";
 
-interface TopicItem {
+export interface TopicItem {
   chapter_title: string;
   topics: string[];
+  chapterNumber?: number;
 }
 
 const AddCourse = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [courseLoading, setCourseLoading] = useState<boolean>(false);
   const [userPrompt, setUserPrompt] = useState<string>("");
   const [topics, setTopics] = useState<TopicItem[]>([]);
   const [selectedTopics, setSelectedTopics] = useState<TopicItem[]>([]);
+
+  const { userDetail } = useContext(UserDetailedContext);
+
+  const router = useRouter();
+
   const onGenerateTopic = async () => {
     //get topic ideas from ai model
     const PROMPT = userPrompt + "\n" + Prompt.COURSE_TOPICS;
 
-    console.log(PROMPT);
     setLoading(true);
     await GenerateTopics(PROMPT)
       .then((aiResponse) => {
-        console.log(aiResponse);
         setTopics(aiResponse);
         setLoading(false);
       })
@@ -58,12 +66,24 @@ const AddCourse = () => {
     return selected;
   };
 
+  const onGenerateCourse = async () => {
+    console.log(selectedTopics);
+    setCourseLoading(true);
+    if (selectedTopics && selectedTopics.length > 0 && userDetail) {
+      const response = await createCourse(selectedTopics, userDetail);
+      if (response.success) {
+        router.push("/(tabs)/home");
+      }
+    }
+    setCourseLoading(false);
+  };
+
   return (
     <View
       style={{
-        padding: 25, // Apply padding to the outer container
+        padding: 25,
         backgroundColor: Colors.WHITE,
-        flex: 1, // Allows the outer container to take full height
+        flex: 1,
       }}
     >
       <ScrollView
@@ -168,7 +188,11 @@ const AddCourse = () => {
       </ScrollView>
 
       {selectedTopics?.length > 0 && (
-        <Button text="Generate Course" onPress={() => {}} loading={loading} />
+        <Button
+          text="Generate Course"
+          onPress={onGenerateCourse}
+          loading={courseLoading}
+        />
       )}
     </View>
   );

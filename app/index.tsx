@@ -29,6 +29,7 @@ export default function Index() {
             setLoading(true);
             const result = await getDoc(userDocRef);
             if (result.exists()) {
+              console.log(result.data());
               setUserDetail(result.data());
               setLoading(false);
               router.replace("/(tabs)/home");
