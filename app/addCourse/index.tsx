@@ -22,12 +22,38 @@ export interface TopicItem {
   chapterNumber?: number;
 }
 
+interface FlashCard {
+  front: string;
+  back: string;
+}
+
+interface QuestionAnswer {
+  question: string;
+  answer: string;
+}
+
+interface Quiz {
+  options: string[];
+  correctAns: string;
+}
+
+export interface CourseItem {
+  course_title: string;
+  banner_image: string;
+  description: string;
+  flashcards: FlashCard[];
+  qa: QuestionAnswer[];
+  quizes: Quiz[];
+  chapters?: TopicItem[];
+}
+
 const AddCourse = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [courseLoading, setCourseLoading] = useState<boolean>(false);
   const [userPrompt, setUserPrompt] = useState<string>("");
   const [topics, setTopics] = useState<TopicItem[]>([]);
   const [selectedTopics, setSelectedTopics] = useState<TopicItem[]>([]);
+  const [courseInformation, setCourseInformation] = useState<CourseItem>();
 
   const { userDetail } = useContext(UserDetailedContext);
 
@@ -40,7 +66,16 @@ const AddCourse = () => {
     setLoading(true);
     await GenerateTopics(PROMPT)
       .then((aiResponse) => {
-        setTopics(aiResponse);
+        setTopics(aiResponse?.chapters);
+        const course = {
+          course_title: aiResponse?.course_title,
+          banner_image: aiResponse?.banner_image,
+          description: aiResponse?.description,
+          flashcards: aiResponse?.flashcards,
+          qa: aiResponse?.qa,
+          quizes: aiResponse?.quizes,
+        };
+        setCourseInformation(course);
         setLoading(false);
       })
       .finally(() => {
@@ -69,8 +104,17 @@ const AddCourse = () => {
   const onGenerateCourse = async () => {
     console.log(selectedTopics);
     setCourseLoading(true);
-    if (selectedTopics && selectedTopics.length > 0 && userDetail) {
-      const response = await createCourse(selectedTopics, userDetail);
+    if (
+      selectedTopics &&
+      selectedTopics.length > 0 &&
+      userDetail &&
+      courseInformation
+    ) {
+      const response = await createCourse(
+        selectedTopics,
+        courseInformation,
+        userDetail
+      );
       if (response.success) {
         router.push("/(tabs)/home");
       }
@@ -136,24 +180,22 @@ const AddCourse = () => {
           loading={loading}
         />
 
-        {/* This View contains the FlatList and its title */}
         <View
           style={{
             marginTop: 15,
-            // Removed marginBottom here, use contentContainerStyle on ScrollView or ItemSeparatorComponent on FlatList for spacing
           }}
         >
           <Text
             style={{
               fontFamily: "outfit",
               fontSize: 20,
-              marginBottom: 8, // Add some space below this text
+              marginBottom: 8,
             }}
           >
             Select all topics which you want to add in this course
           </Text>
           <FlatList
-            showsVerticalScrollIndicator={false} // FlatList inside ScrollView might not need its own indicator
+            showsVerticalScrollIndicator={false}
             data={topics}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => (

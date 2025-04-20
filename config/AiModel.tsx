@@ -245,7 +245,7 @@ export async function GenerateTopics(courseTitleIdea: string) {
       contents,
     });
 
-    console.log(response);
+    console.log(response?.text);
 
     if (response?.text) {
       console.log(

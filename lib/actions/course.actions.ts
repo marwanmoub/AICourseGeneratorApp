@@ -1,18 +1,26 @@
-import { TopicItem } from "@/app/addCourse";
+import { CourseItem, TopicItem } from "@/app/addCourse";
 import { db } from "@/config/firebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
 import Toast from "react-native-toast-message";
 
-export const createCourse = async (selectedTopics: TopicItem[], userDetail) => {
+export const createCourse = async (
+  selectedTopics: TopicItem[],
+  courseInformation: CourseItem,
+  userDetail
+) => {
   try {
-    const course = selectedTopics;
+    const course = {
+      ...courseInformation,
+      chapters: selectedTopics,
+    };
 
-    for (let i = 0; i < course.length - 1; i++) course[i].chapterNumber = i + 1;
+    for (let i = 0; i < course.chapters.length - 1; i++)
+      course.chapters[i].chapterNumber = i + 1;
 
     await setDoc(
       doc(db, "Courses", `${Date.now().toString() + userDetail?.email}`),
       {
-        chapters: course,
+        ...course,
         createdAt: new Date(),
         createdBy: userDetail?.email,
       }
