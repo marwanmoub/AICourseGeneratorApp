@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
   Image,
   StyleSheet,
+  TouchableOpacity,
 } from "react-native";
 import React from "react";
 import { CourseItem } from "@/app/addCourse";
@@ -12,12 +13,15 @@ import { DocumentData } from "firebase/firestore";
 import Colors from "@/constants/Colors";
 import { imageAssets } from "@/constants/Option";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useRouter } from "expo-router";
 
 const CourseList = ({
   courseList,
 }: {
   courseList: CourseItem[] | DocumentData[];
 }) => {
+  const router = useRouter();
+
   return (
     <View
       style={{
@@ -39,7 +43,18 @@ const CourseList = ({
           data={courseList}
           showsHorizontalScrollIndicator={false}
           renderItem={({ item, index }) => (
-            <View key={index} style={styles.courseContainer}>
+            <TouchableOpacity
+              key={index}
+              style={styles.courseContainer}
+              onPress={() =>
+                router.push({
+                  pathname: "/courseView",
+                  params: {
+                    courseParams: JSON.stringify(item),
+                  },
+                })
+              }
+            >
               <Image
                 source={imageAssets[item?.banner_image]}
                 style={{
@@ -75,7 +90,7 @@ const CourseList = ({
                   {item?.chapters?.length} Chapters
                 </Text>
               </View>
-            </View>
+            </TouchableOpacity>
           )}
         />
       ) : (

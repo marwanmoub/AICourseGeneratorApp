@@ -130,104 +130,110 @@ const AddCourse = () => {
         flex: 1,
       }}
     >
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 20 }}
-      >
-        <Text
-          style={{
-            fontFamily: "outfit-bold",
-            fontSize: 30,
-          }}
-        >
-          Create New Course
-        </Text>
-        <Text
-          style={{
-            fontFamily: "outfit",
-            fontSize: 30,
-          }}
-        >
-          What do you want to learn today?
-        </Text>
+      <FlatList
+        data={[]}
+        renderItem={() => null}
+        ListHeaderComponentStyle={{
+          flex: 1,
+        }}
+        ListHeaderComponent={
+          <View>
+            <Text
+              style={{
+                fontFamily: "outfit-bold",
+                fontSize: 30,
+              }}
+            >
+              Create New Course
+            </Text>
+            <Text
+              style={{
+                fontFamily: "outfit",
+                fontSize: 30,
+              }}
+            >
+              What do you want to learn today?
+            </Text>
 
-        <Text
-          style={{
-            fontFamily: "outfit",
-            fontSize: 20,
-            marginTop: 8,
-            color: Colors.GRAY,
-          }}
-        >
-          Write what course you want to create (Ex: Learn TypeScript or
-          Introduction to Programming)
-        </Text>
+            <Text
+              style={{
+                fontFamily: "outfit",
+                fontSize: 20,
+                marginTop: 8,
+                color: Colors.GRAY,
+              }}
+            >
+              Write what course you want to create (Ex: Learn TypeScript or
+              Introduction to Programming)
+            </Text>
 
-        <CustomTextInput
-          placeholder="(Ex: Introduction to Programming)"
-          customStyles={styles.textInput}
-          numberOfLines={3}
-          multiline={true}
-          onChangeValue={(value) => {
-            setUserPrompt(value);
-          }}
-        />
+            <CustomTextInput
+              placeholder="(Ex: Introduction to Programming)"
+              customStyles={styles.textInput}
+              numberOfLines={3}
+              multiline={true}
+              onChangeValue={(value) => {
+                setUserPrompt(value);
+              }}
+            />
 
-        <Button
-          text="Generate Topic"
-          type="outline"
-          onPress={onGenerateTopic}
-          loading={loading}
-        />
+            <Button
+              text="Generate Topic"
+              type="outline"
+              onPress={onGenerateTopic}
+              loading={loading}
+            />
 
-        <View
-          style={{
-            marginTop: 15,
-          }}
-        >
-          <Text
-            style={{
-              fontFamily: "outfit",
-              fontSize: 20,
-              marginBottom: 8,
-            }}
-          >
-            Select all topics which you want to add in this course
-          </Text>
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            data={topics}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-              <Pressable
+            <View
+              style={{
+                marginTop: 15,
+              }}
+            >
+              <Text
                 style={{
-                  marginBottom: 10,
-                }}
-                onPress={() => {
-                  onTopicSelect(item);
+                  fontFamily: "outfit",
+                  fontSize: 20,
+                  marginBottom: 8,
                 }}
               >
-                <Text
-                  style={{
-                    padding: 7,
-                    borderWidth: 0.4,
-                    borderRadius: 99,
-                    paddingHorizontal: 15,
-                    backgroundColor: isTopicSelected(item)
-                      ? Colors.PRIMARY
-                      : undefined,
-                    color: isTopicSelected(item)
-                      ? Colors.WHITE
-                      : Colors.PRIMARY,
-                  }}
-                >
-                  {item?.chapter_title}
-                </Text>
-              </Pressable>
-            )}
-          />
-        </View>
-      </ScrollView>
+                Select all topics which you want to add in this course
+              </Text>
+              <FlatList
+                showsVerticalScrollIndicator={false}
+                data={topics}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }) => (
+                  <Pressable
+                    style={{
+                      marginBottom: 10,
+                    }}
+                    onPress={() => {
+                      onTopicSelect(item);
+                    }}
+                  >
+                    <Text
+                      style={{
+                        padding: 7,
+                        borderWidth: 0.4,
+                        borderRadius: 99,
+                        paddingHorizontal: 15,
+                        backgroundColor: isTopicSelected(item)
+                          ? Colors.PRIMARY
+                          : undefined,
+                        color: isTopicSelected(item)
+                          ? Colors.WHITE
+                          : Colors.PRIMARY,
+                      }}
+                    >
+                      {item?.chapter_title}
+                    </Text>
+                  </Pressable>
+                )}
+              />
+            </View>
+          </View>
+        }
+      />
 
       {selectedTopics?.length > 0 && (
         <Button

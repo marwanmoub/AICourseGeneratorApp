@@ -1,4 +1,4 @@
-import { View, Platform } from "react-native";
+import { View, Platform, FlatList } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import Header from "@/components/Home/Header";
 import Colors from "@/constants/Colors";
@@ -9,6 +9,7 @@ import { UserDetailedContext } from "@/context/UserDetailContext";
 import { DocumentData } from "firebase/firestore";
 import CourseList from "@/components/Home/CourseList";
 import PracticeSection from "@/components/Home/PracticeSection";
+import CourseProgress from "@/components/Home/CourseProgress";
 
 const Home = () => {
   const [courseList, setCourseList] = useState<DocumentData[]>([]);
@@ -34,24 +35,34 @@ const Home = () => {
   }, [userDetail]);
 
   return (
-    <View
-      style={{
-        padding: 25,
-        paddingTop: Platform.OS === "ios" ? 45 : undefined,
+    <FlatList
+      data={[]}
+      ListHeaderComponentStyle={{
         flex: 1,
-        backgroundColor: Colors.WHITE,
       }}
-    >
-      <Header />
-      {courseList?.length === 0 ? (
-        <NoCourse />
-      ) : (
-        <View>
-          <PracticeSection />
-          <CourseList courseList={courseList} />
+      renderItem={() => null}
+      ListHeaderComponent={
+        <View
+          style={{
+            padding: 25,
+            paddingTop: Platform.OS === "ios" ? 45 : undefined,
+            flex: 1,
+            backgroundColor: Colors.WHITE,
+          }}
+        >
+          <Header />
+          {courseList?.length === 0 ? (
+            <NoCourse />
+          ) : (
+            <View>
+              <CourseProgress courseList={courseList} />
+              <PracticeSection />
+              <CourseList courseList={courseList} />
+            </View>
+          )}
         </View>
-      )}
-    </View>
+      }
+    />
   );
 };
 
