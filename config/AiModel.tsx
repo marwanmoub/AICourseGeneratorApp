@@ -245,15 +245,8 @@ export async function GenerateTopics(courseTitleIdea: string) {
       contents,
     });
 
-    console.log(response?.text);
-
     if (response?.text) {
-      console.log(
-        "RESPONSE IS BACK BABY and here is the response\n" + response
-      );
-
-      const parsedResult = JSON.parse(response.text);
-      return parsedResult;
+      return JSON.parse(response?.text);
     }
   } catch (err) {
     console.error(err);

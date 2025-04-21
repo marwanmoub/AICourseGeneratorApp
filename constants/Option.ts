@@ -1,15 +1,18 @@
-export const PraticeOption = [
+export const PracticeOption = [
   {
     name: "Quizz",
     image: require("./../assets/images/quizz.png"),
+    icon: require("./../assets/images/quiz.png"),
   },
   {
     name: "Flashcards",
     image: require("./../assets/images/flashcard.png"),
+    icon: require("./../assets/images/layers.png"),
   },
   {
     name: "Question & Ans",
     image: require("./../assets/images/notes.png"),
+    icon: require("./../assets/images/qa.png"),
   },
 ];
 

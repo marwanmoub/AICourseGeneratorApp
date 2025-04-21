@@ -18,7 +18,12 @@ import { useRouter } from "expo-router";
 
 export interface TopicItem {
   chapter_title: string;
-  topics: string[];
+  topics: {
+    code?: string;
+    definition?: string;
+    explain?: string;
+    description: string;
+  }[];
   chapterNumber?: number;
 }
 
@@ -45,6 +50,8 @@ export interface CourseItem {
   qa: QuestionAnswer[];
   quizes: Quiz[];
   chapters?: TopicItem[];
+  docId?: string;
+  completedChapters?: number[];
 }
 
 const AddCourse = () => {
@@ -102,7 +109,6 @@ const AddCourse = () => {
   };
 
   const onGenerateCourse = async () => {
-    console.log(selectedTopics);
     setCourseLoading(true);
     if (
       selectedTopics &&
@@ -136,6 +142,7 @@ const AddCourse = () => {
         ListHeaderComponentStyle={{
           flex: 1,
         }}
+        showsVerticalScrollIndicator={false}
         ListHeaderComponent={
           <View>
             <Text

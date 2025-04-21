@@ -9,8 +9,15 @@ import * as Progress from "react-native-progress";
 const CourseProgress = ({
   courseList,
 }: {
-  courseList: DocumentData[] | CourseItem[];
+  courseList: CourseItem[] | DocumentData[];
 }) => {
+  const calculateCourseProgress = (course: CourseItem | DocumentData) => {
+    const completedChapterCount = course?.completedChapters?.length;
+    const percentage = completedChapterCount / course?.chapters?.length;
+
+    return percentage;
+  };
+
   return (
     <View
       style={{
@@ -21,6 +28,7 @@ const CourseProgress = ({
         style={{
           fontFamily: "outfit-bold",
           fontSize: 25,
+          color: Colors.WHITE,
         }}
       >
         Progress
@@ -85,14 +93,18 @@ const CourseProgress = ({
                 marginTop: 10,
               }}
             >
-              <Progress.Bar progress={0} width={250} />
+              <Progress.Bar
+                progress={calculateCourseProgress(item)}
+                width={250}
+              />
               <Text
                 style={{
                   fontFamily: "outfit",
                   marginTop: 2,
                 }}
               >
-                3 Out of {item?.chapters?.length} Chapters Completed
+                {item?.completedChapters?.length} Out of{" "}
+                {item?.chapters?.length} Chapters Completed
               </Text>
             </View>
           </View>

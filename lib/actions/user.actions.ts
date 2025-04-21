@@ -37,7 +37,7 @@ export const CreateNewUser = async (data: SignUpData) => {
       };
     }
   } catch (err) {
-    console.log("Could not create a new account");
+    console.error(err);
     throw err;
   }
 };

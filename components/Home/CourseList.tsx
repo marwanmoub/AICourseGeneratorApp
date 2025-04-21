@@ -48,7 +48,7 @@ const CourseList = ({
               style={styles.courseContainer}
               onPress={() =>
                 router.push({
-                  pathname: "/courseView",
+                  pathname: `/courseView/${item?.docId}`,
                   params: {
                     courseParams: JSON.stringify(item),
                   },

@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import React, { useContext } from "react";
 import { UserDetailedContext } from "@/context/UserDetailContext";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import Colors from "@/constants/Colors";
 
 const Header = () => {
   const { userDetail } = useContext(UserDetailedContext);
@@ -19,16 +20,19 @@ const Header = () => {
           style={{
             fontFamily: "outfit",
             fontSize: 25,
+            color: Colors.WHITE,
           }}
         >
           Hello, {userDetail?.name}
         </Text>
-        <Text style={{ fontFamily: "outfit", fontSize: 17 }}>
+        <Text
+          style={{ fontFamily: "outfit", fontSize: 17, color: Colors.WHITE }}
+        >
           Let's Get Started
         </Text>
       </View>
       <TouchableOpacity>
-        <Ionicons name="settings-outline" size={32} color="black" />
+        <Ionicons name="settings-outline" size={32} color="white" />
       </TouchableOpacity>
     </View>
   );

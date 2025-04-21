@@ -1,11 +1,27 @@
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
 import { DocumentData } from "firebase/firestore";
 import { CourseItem } from "@/app/addCourse";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Colors from "@/constants/Colors";
+import { useRouter } from "expo-router";
 
 const Chapters = ({ course }: { course: DocumentData | CourseItem }) => {
+  const router = useRouter();
+
+  const isChapterCompleted = (index: number): boolean => {
+    const isCompleted: boolean = course?.completedChapters?.find(
+      (item: number) => Number(item) === index
+    );
+    return isCompleted;
+  };
+
   return (
     <View
       style={{
@@ -23,7 +39,17 @@ const Chapters = ({ course }: { course: DocumentData | CourseItem }) => {
       <FlatList
         data={course?.chapters}
         renderItem={({ item, index }) => (
-          <View
+          <TouchableOpacity
+            onPress={() =>
+              router.push({
+                pathname: "/chapterView",
+                params: {
+                  chapterParams: JSON.stringify(item),
+                  docId: course?.docId,
+                  chapterIndex: index + 1,
+                },
+              })
+            }
             style={{
               padding: 20,
               borderWidth: 0.5,
@@ -48,8 +74,16 @@ const Chapters = ({ course }: { course: DocumentData | CourseItem }) => {
               </Text>
             </View>
 
-            <Ionicons name="play" size={24} color={Colors.PRIMARY} />
-          </View>
+            {isChapterCompleted(index + 1) ? (
+              <Ionicons
+                name="checkmark-circle-outline"
+                size={24}
+                color={Colors.GREEN}
+              />
+            ) : (
+              <Ionicons name="play" size={24} color={Colors.PRIMARY} />
+            )}
+          </TouchableOpacity>
         )}
       />
     </View>
