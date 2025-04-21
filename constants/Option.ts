@@ -1,6 +1,6 @@
 export const PracticeOption = [
   {
-    name: "Quizz",
+    name: "Quiz",
     image: require("./../assets/images/quizz.png"),
     icon: require("./../assets/images/quiz.png"),
   },

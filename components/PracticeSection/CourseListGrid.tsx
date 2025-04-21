@@ -1,9 +1,10 @@
-import { View, Text, FlatList, Image } from "react-native";
+import { View, Text, FlatList, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import { DocumentData } from "firebase/firestore";
 import { CourseItem } from "@/app/addCourse";
 import Colors from "@/constants/Colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { router, useRouter } from "expo-router";
 
 const CourseListGrid = ({
   courseList,
@@ -12,6 +13,18 @@ const CourseListGrid = ({
   courseList: DocumentData[] | CourseItem[];
   option: unknown | undefined;
 }) => {
+  const router = useRouter();
+
+  const onPress = (course: DocumentData | CourseItem) => {
+    if (option?.name === "Quiz") {
+      router.push({
+        pathname: "/quiz",
+        params: {
+          courseParams: JSON.stringify(course),
+        },
+      });
+    }
+  };
   return (
     <View>
       <FlatList
@@ -21,7 +34,11 @@ const CourseListGrid = ({
         }}
         numColumns={2}
         renderItem={({ item, index }) => (
-          <View
+          <TouchableOpacity
+            key={index}
+            onPress={() => {
+              onPress(item);
+            }}
             style={{
               flex: 1,
               display: "flex",
@@ -46,7 +63,7 @@ const CourseListGrid = ({
               }}
             />
             <Image
-              source={option?.icon}
+              source={option?.icons}
               style={{
                 width: 100,
                 height: 70,
@@ -54,6 +71,7 @@ const CourseListGrid = ({
               }}
             />
             <Text
+              numberOfLines={2}
               style={{
                 fontFamily: "outfit",
                 textAlign: "center",
@@ -62,7 +80,7 @@ const CourseListGrid = ({
             >
               {item?.course_title}
             </Text>
-          </View>
+          </TouchableOpacity>
         )}
       />
     </View>
