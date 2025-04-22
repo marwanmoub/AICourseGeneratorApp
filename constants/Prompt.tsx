@@ -11,6 +11,7 @@ export default {
              - course_title: string
              - banner_image: '/banner1.png', '/banner2.png', ... '/banner6.png', pick one of them: string
              - description: string
+             - category: string (tag the course with one of the following categories: "Tech & Coding", "Business & Finance", "Health & Fitness", "Science & Engineering", "Arts & Creativity", "Others")
              - flashcards: array of objects where each object contains {back: string, front: string} - AT LEAST 5
              - qa: array of objects where each object contains {question: string, answer: string} - AT LEAST 5
              - quizes: array of objects where each object MUST CONTAIN {options: array of strings options, correctAns: string, question: string} - AT LEAST 10
