@@ -1,15 +1,56 @@
 import { View, Text, Image, Pressable } from "react-native";
-import React from "react";
+import React, { useContext, useState } from "react";
 import { imageAssets } from "@/constants/Option";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Colors from "@/constants/Colors";
 import Button from "../Shared/Button";
 import { useRouter } from "expo-router";
-import { DocumentData } from "firebase/firestore";
+import { doc, DocumentData, setDoc } from "firebase/firestore";
 import { CourseItem } from "@/app/addCourse";
+import { UserDetailedContext } from "@/context/UserDetailContext";
+import { db } from "@/config/firebaseConfig";
 
-const Intro = ({ course }: { course: DocumentData | CourseItem }) => {
+const Intro = ({
+  course,
+  enroll,
+}: {
+  course: DocumentData | CourseItem;
+  enroll: boolean;
+}) => {
   const router = useRouter();
+
+  const { userDetail } = useContext(UserDetailedContext);
+
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const enrollCourse = async () => {
+    setLoading(true);
+    try {
+      const docId = Date.now().toString();
+
+      const data = {
+        ...course,
+        createdBy: userDetail?.email,
+        createdOn: new Date(),
+        enroll: true,
+      };
+
+      await setDoc(doc(db, "Courses", docId), data).then(() => {
+        setLoading(false);
+        router.replace({
+          pathname: `/courseView/${docId}`,
+          params: {
+            courseParams: JSON.stringify(data),
+            enroll: "false",
+          },
+        });
+      });
+    } catch (err) {
+      setLoading(false);
+      console.error(err);
+      throw err;
+    }
+  };
 
   return (
     <View>
@@ -73,8 +114,17 @@ const Intro = ({ course }: { course: DocumentData | CourseItem }) => {
             {course?.description}
           </Text>
         </View>
-
-        <Button text="Start Now" onPress={() => {}} />
+        {enroll ? (
+          <Button
+            text="Enroll Now"
+            loading={loading}
+            onPress={() => {
+              enrollCourse();
+            }}
+          />
+        ) : (
+          <Button text="Start Now" onPress={() => {}} />
+        )}
       </View>
       <Pressable
         style={{

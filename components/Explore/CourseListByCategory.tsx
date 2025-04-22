@@ -68,7 +68,7 @@ const CourseListByCategory = ({ category }: { category: string }) => {
 
   return (
     <View>
-      <CourseList courseList={courseList} heading={category} />
+      <CourseList courseList={courseList} heading={category} enroll={true} />
     </View>
   );
 };

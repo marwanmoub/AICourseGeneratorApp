@@ -8,8 +8,14 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/config/firebaseConfig";
 
 const CourseView = () => {
-  const { courseParams, courseId }: { courseParams: any; courseId: string } =
+  const {
+    courseParams,
+    courseId,
+    enroll,
+  }: { courseParams: any; courseId: string; enroll: string } =
     useLocalSearchParams();
+
+  const enrollBoolean: boolean = enroll === "true" ? true : false;
 
   const [course, setCourse] = useState([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -58,7 +64,7 @@ const CourseView = () => {
             backgroundColor: Colors.WHITE,
           }}
         >
-          <Intro course={course} />
+          <Intro course={course} enroll={enrollBoolean} />
           <Chapters course={course} />
         </View>
       }

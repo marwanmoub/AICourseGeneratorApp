@@ -16,8 +16,10 @@ import Colors from "@/constants/Colors";
 
 const CourseListShared = ({
   courseList,
+  enroll = false,
 }: {
   courseList: CourseItem[] | DocumentData[];
+  enroll?: boolean;
 }) => {
   const router = useRouter();
   return (
@@ -34,6 +36,7 @@ const CourseListShared = ({
               pathname: `/courseView/${item?.docId}`,
               params: {
                 courseParams: JSON.stringify(item),
+                enroll: JSON.stringify(enroll),
               },
             })
           }

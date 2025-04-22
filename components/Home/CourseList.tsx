@@ -19,9 +19,11 @@ import CourseListShared from "../Shared/CourseListShared";
 const CourseList = ({
   courseList,
   heading = "Course List",
+  enroll = false,
 }: {
   courseList: CourseItem[] | DocumentData[];
   heading?: string;
+  enroll?: boolean;
 }) => {
   return (
     <View
@@ -39,7 +41,7 @@ const CourseList = ({
       </Text>
 
       {courseList ? (
-        <CourseListShared courseList={courseList} />
+        <CourseListShared courseList={courseList} enroll={enroll} />
       ) : (
         <ActivityIndicator size="large" color={Colors.PRIMARY} />
       )}
