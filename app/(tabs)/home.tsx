@@ -68,8 +68,6 @@ const Home = () => {
               style={{
                 padding: 25,
                 paddingTop: Platform.OS === "ios" ? 45 : undefined,
-                // flex: 1,
-                // backgroundColor: Colors.WHITE,
               }}
             >
               <Header />
