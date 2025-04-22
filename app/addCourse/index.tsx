@@ -6,7 +6,7 @@ import {
   FlatList,
   ScrollView,
 } from "react-native";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Colors from "@/constants/Colors";
 import CustomTextInput from "@/components/FormComponents/CustomTextInput";
 import Button from "@/components/Shared/Button";
@@ -66,7 +66,16 @@ const AddCourse = () => {
 
   const router = useRouter();
 
+  useEffect(() => {
+    console.log(userDetail);
+  }, []);
+
   const onGenerateTopic = async () => {
+    if (userDetail?.member === false) {
+      router.push("/subscriptionWall");
+      return;
+    }
+
     //get topic ideas from ai model
     const PROMPT = userPrompt + "\n" + Prompt.COURSE_TOPICS;
 
@@ -189,7 +198,6 @@ const AddCourse = () => {
               type="outline"
               onPress={onGenerateTopic}
               loading={loading}
-              loadingText="Generating Topics"
             />
 
             <View
@@ -204,7 +212,8 @@ const AddCourse = () => {
                   marginBottom: 8,
                 }}
               >
-                Select all topics which you want to add in this course
+                (This might take some time) Select all topics which you want to
+                add in this course
               </Text>
               <FlatList
                 showsVerticalScrollIndicator={false}
@@ -248,7 +257,6 @@ const AddCourse = () => {
           text="Generate Course"
           onPress={onGenerateCourse}
           loading={courseLoading}
-          loadingText="Generating Course"
         />
       )}
     </View>

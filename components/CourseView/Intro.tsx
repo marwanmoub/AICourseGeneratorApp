@@ -24,6 +24,11 @@ const Intro = ({
   const [loading, setLoading] = useState<boolean>(false);
 
   const enrollCourse = async () => {
+    if (userDetail?.member === false) {
+      router.push("/subscriptionWall");
+      return;
+    }
+
     setLoading(true);
     try {
       const docId = Date.now().toString();
