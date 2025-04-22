@@ -7,9 +7,16 @@ interface ButtonProps {
   type?: "fill" | "outline";
   onPress?: () => void;
   loading?: boolean;
+  loadingText?: string;
 }
 
-const Button = ({ text, type = "fill", onPress, loading }: ButtonProps) => {
+const Button = ({
+  text,
+  type = "fill",
+  onPress,
+  loading,
+  loadingText,
+}: ButtonProps) => {
   return (
     <TouchableOpacity
       style={{
@@ -35,10 +42,30 @@ const Button = ({ text, type = "fill", onPress, loading }: ButtonProps) => {
           {text}
         </Text>
       ) : (
-        <ActivityIndicator
-          size="small"
-          color={type === "fill" ? Colors.WHITE : Colors.PRIMARY}
-        />
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {loadingText && (
+            <Text
+              style={{
+                fontFamily: "outfit",
+                fontSize: 10,
+                color: Colors.PRIMARY,
+              }}
+            >
+              {loadingText}
+            </Text>
+          )}
+          <ActivityIndicator
+            size="small"
+            color={type === "fill" ? Colors.WHITE : Colors.PRIMARY}
+          />
+        </View>
       )}
     </TouchableOpacity>
   );

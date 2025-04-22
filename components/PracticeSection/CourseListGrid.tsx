@@ -11,20 +11,24 @@ const CourseListGrid = ({
   option,
 }: {
   courseList: DocumentData[] | CourseItem[];
-  option: unknown | undefined;
+  option?: {
+    name: string;
+    image: any;
+    icon: any;
+    path: string;
+  };
 }) => {
   const router = useRouter();
 
   const onPress = (course: DocumentData | CourseItem) => {
-    if (option?.name === "Quiz") {
-      router.push({
-        pathname: "/quiz",
-        params: {
-          courseParams: JSON.stringify(course),
-        },
-      });
-    }
+    router.push({
+      pathname: option?.path,
+      params: {
+        courseParams: JSON.stringify(course),
+      },
+    });
   };
+
   return (
     <View>
       <FlatList
@@ -63,7 +67,7 @@ const CourseListGrid = ({
               }}
             />
             <Image
-              source={option?.icons}
+              source={option?.icon}
               style={{
                 width: 100,
                 height: 70,

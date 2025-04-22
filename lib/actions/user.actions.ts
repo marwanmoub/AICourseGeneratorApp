@@ -6,7 +6,6 @@ import {
 } from "firebase/auth";
 import { SignUpSchema } from "../validation/auth.validation";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { ToastAndroid } from "react-native";
 
 interface SignInData {
   email: string;

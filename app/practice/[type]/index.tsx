@@ -1,7 +1,7 @@
 import { View, Text, Image, Pressable, ActivityIndicator } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { imageAssets, PracticeOption } from "./../../../constants/Option";
+import { PracticeOption } from "./../../../constants/Option";
 import Colors from "@/constants/Colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";

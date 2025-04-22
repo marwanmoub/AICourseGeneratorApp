@@ -3,16 +3,19 @@ export const PracticeOption = [
     name: "Quiz",
     image: require("./../assets/images/quizz.png"),
     icon: require("./../assets/images/quiz.png"),
+    path: "/quiz",
   },
   {
     name: "Flashcards",
     image: require("./../assets/images/flashcard.png"),
     icon: require("./../assets/images/layers.png"),
+    path: "/flashcards",
   },
   {
     name: "Question & Ans",
     image: require("./../assets/images/notes.png"),
     icon: require("./../assets/images/qa.png"),
+    path: "/questionAnswers",
   },
 ];
 

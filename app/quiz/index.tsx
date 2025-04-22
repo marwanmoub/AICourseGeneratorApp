@@ -120,7 +120,11 @@ const Quiz = () => {
             alignItems: "center",
           }}
         >
-          <Pressable>
+          <Pressable
+            onPress={() => {
+              router.back();
+            }}
+          >
             <Ionicons name="arrow-back" size={24} color="white" />
           </Pressable>
           <Text

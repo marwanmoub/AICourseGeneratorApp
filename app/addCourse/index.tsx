@@ -189,6 +189,7 @@ const AddCourse = () => {
               type="outline"
               onPress={onGenerateTopic}
               loading={loading}
+              loadingText="Generating Topics"
             />
 
             <View
@@ -247,6 +248,7 @@ const AddCourse = () => {
           text="Generate Course"
           onPress={onGenerateCourse}
           loading={courseLoading}
+          loadingText="Generating Course"
         />
       )}
     </View>

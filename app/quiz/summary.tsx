@@ -36,6 +36,7 @@ const QuizSummary = () => {
   return (
     <FlatList
       data={[]}
+      showsVerticalScrollIndicator={false}
       style={{
         backgroundColor: Colors.WHITE,
       }}
@@ -145,6 +146,7 @@ const QuizSummary = () => {
               </Text>
               <FlatList
                 data={result}
+                showsVerticalScrollIndicator={false}
                 renderItem={({
                   item,
                   index,
